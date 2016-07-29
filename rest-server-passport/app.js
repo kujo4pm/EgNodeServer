@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy
+var authenticate = require('./authenticate');
 
 var config = require('./config');
 
@@ -25,7 +25,7 @@ var users = require('./routes/users');
 var dishes = require('./routes/dishRouter');
 var promos = require('./routes/promoRouter');
 var leaders = require('./routes/leaderRouter');
-
+var favorites = require('./routes/favoriteRouter');
 
 var app = express();
 // Secure traffic only
@@ -53,17 +53,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //passport config 
-var User = require('./models/user');
 app.use(passport.initialize());
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/dishes', dishes);
 app.use('/promotions', promos);
 app.use('/leadership', leaders);
+app.use('/favorites', favorites);
 
 
 
